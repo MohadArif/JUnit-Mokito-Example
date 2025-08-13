@@ -66,8 +66,8 @@ class ProductControllerTest {
     @Test
     void findAllProduct() throws Exception {
         List<Product> productList=List.of(new Product(1L, "rice", "basmati", 1250.0, "12/02/23", "23/05/26"),
-                new Product(1L, "sonam", "basmati", 1250.0, "12/02/23", "23/05/26"),
-                new Product(1L, "nafis", "basmati", 1250.0, "12/02/23", "23/05/26"));
+                new Product(2L, "sonam", "basmati", 1250.0, "12/02/23", "23/05/26"),
+                new Product(3L, "nafis", "basmati", 1250.0, "12/02/23", "23/05/26"));
         when(productService.findAll()).thenReturn(productList);
 
         mockMvc.perform(get("/api/product")
@@ -99,7 +99,7 @@ class ProductControllerTest {
     @Test
     void updateProduct() throws Exception {
        Product newProduct = new Product(1L, "Aata", "Ashriwad", 1250.0, "12/02/23", "23/05/26");
-        when(productService.updateProduct(product.getId(),newProduct)).thenReturn(product);
+        when(productService.updateProduct(product.getId(),newProduct)).thenReturn(newProduct);
 
         mockMvc.perform(put("/api/product/{id}",product.getId())
                 .contentType(MediaType.APPLICATION_JSON)

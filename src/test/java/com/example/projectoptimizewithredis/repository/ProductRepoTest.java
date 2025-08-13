@@ -10,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -43,5 +43,11 @@ class ProductRepoTest {
     void testDeleteById(){
         productRepo.deleteById(product.getId());
         assertTrue(productRepo.findById(product.getId()).isEmpty());
+    }
+
+    @Test
+    void testFindById_NotFound() {
+        Optional<Product> productOpt = productRepo.findById(999L);
+        assertTrue(productOpt.isEmpty());
     }
 }
