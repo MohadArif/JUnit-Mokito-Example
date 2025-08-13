@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProductService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.projectoptimizewithredis.service</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductService (com.example.projectoptimizewithredis.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.projectoptimizewithredis.service;
+&nbsp;import com.example.projectoptimizewithredis.entity.Product;
+&nbsp;import com.example.projectoptimizewithredis.repository.ProductRepo;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.cache.annotation.CacheEvict;
+&nbsp;import org.springframework.cache.annotation.CachePut;
+&nbsp;import org.springframework.cache.annotation.Cacheable;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+&nbsp;@RequiredArgsConstructor
+&nbsp;public class ProductService {
+&nbsp;
+&nbsp;    private final ProductRepo productRepo;
+&nbsp;
+&nbsp;    // Create: Clear all cache since new record changes the dataset
+&nbsp;    @CacheEvict(value = &quot;product&quot;, allEntries = true)
+&nbsp;    public Product createProduct(Product product) {
+<b class="fc">&nbsp;        return productRepo.save(product);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Get All: Cache result
+&nbsp;    @Cacheable(value = &quot;product&quot;)
+&nbsp;    public List&lt;Product&gt; findAll() {
+<b class="fc">&nbsp;        System.out.println(&quot;Fetching from DB...&quot;);</b>
+<b class="fc">&nbsp;        return productRepo.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Get by ID: Cache result
+&nbsp;    @Cacheable(value = &quot;product&quot;, key = &quot;#id&quot;)
+&nbsp;    public Product findById(Long id) {
+<b class="fc">&nbsp;        System.out.println(&quot;Fetching from DB...&quot;);</b>
+<b class="fc">&nbsp;        return productRepo.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new RuntimeException(&quot;Product Not found&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Delete: Remove both list and single product from cache
+&nbsp;    @CacheEvict(value = &quot;product&quot;, key = &quot;#id&quot;, allEntries = true)
+&nbsp;    public void deleteById(Long id) {
+<b class="fc">&nbsp;        productRepo.deleteById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Update: Update the specific product cache and clear the list cache
+&nbsp;    @CachePut(value = &quot;product&quot;, key = &quot;#id&quot;)
+&nbsp;    @CacheEvict(value = &quot;product&quot;, allEntries = true)
+&nbsp;    public Product updateProduct(Long id, Product product) {
+<b class="fc">&nbsp;        Product existingProduct = productRepo.findById(id)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new RuntimeException(&quot;Product Not found&quot;));</b>
+<b class="fc">&nbsp;        existingProduct.setName(product.getName());</b>
+<b class="fc">&nbsp;        existingProduct.setBrand(product.getBrand());</b>
+<b class="fc">&nbsp;        existingProduct.setPrice(product.getPrice());</b>
+<b class="fc">&nbsp;        existingProduct.setMfdDate(product.getMfdDate());</b>
+<b class="fc">&nbsp;        existingProduct.setExpDate(product.getExpDate());</b>
+<b class="fc">&nbsp;        return productRepo.save(existingProduct);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-13 17:44</div>
+</div>
+</body>
+</html>
